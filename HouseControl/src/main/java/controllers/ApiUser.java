@@ -29,6 +29,39 @@ import modelObjects.User.UserType;
 
 @Path("/user")
 public class ApiUser {
+	
+	@GET
+	@Path("/authenticateuser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAuthenticateUser(@Context HttpServletRequest req) {
+		User user = new User();
+		Response response = null;
+
+		try {
+			if(SessionHandler.isAuthUser(req) == false) {
+				throw new Exception("Access Denied - Login First");
+			}
+
+			UserType type = SessionHandler.getType(req);
+
+			user.setUserID(SessionHandler.getId(req));
+			user.setType(type);
+
+			String fullName = SessionHandler.getFullname(req);
+			String[] fullNameArr = fullName.split(" ");
+
+			user.setFirstname(fullNameArr[0]);
+			user.setLastname(fullNameArr[1]);
+
+			response = Response.ok(GenericResponse.ok(user)).build();
+
+		} catch(Exception e) {
+			response = Response.ok(GenericResponse.error(e.getMessage())).build();
+		}
+
+		return response;
+	}	
+	
 	@POST
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -67,8 +100,8 @@ public class ApiUser {
 			}
 			if(user.getPassword().equals(password)){
 				user.setPassword("********");
-				String fullname = user.getFirstname() + " " + user.getLastname();
-				SessionHandler.authUser(user.getUserID(),user.getType(),fullname, req);	
+				
+				SessionHandler.authUser(user.getUserID(),user.getType(),user.getFirstname(),user.getLastname(), req);	
 				response = Response.ok(GenericResponse.ok(user)).build();
 			}
 			else{
