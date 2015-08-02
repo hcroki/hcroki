@@ -73,9 +73,9 @@ public class ApiUserInGroup {
 	}
 	
 //	@GET
-//	@Path("/get_devices_groups/{userID}")
+//	@Path("/user_devices_groups/{userID}")
 //	@Produces(MediaType.APPLICATION_JSON)
-//	public Response getDevicesGroupsByUser(@Context HttpServletRequest req, @PathParam("userID") int userID) {
+//	public Response getDevicesGroupsByUserID(@Context HttpServletRequest req, @PathParam("userID") int userID) {
 //		
 //	}
 

@@ -114,8 +114,12 @@ public class UserInGroupHandler {
 		return users;
 	}
 	
-//	public static List<DevicesGroup> getDevicesGroupsUserIsMemberOf(int userID){
-//		
-//	}
+	public static List<DevicesGroup> getDevicesGroupsUserIsMemberOf(int userID){
+		List<DevicesGroup> devicesGroups = new ArrayList<DevicesGroup>();
+		
+		
+		
+		return devicesGroups;
+	}
 
 }

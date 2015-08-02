@@ -66,7 +66,7 @@ public class DevicesGroupHandler {
 			throw new Exception("Devices group name cannot be empty");
 		}
 		try{
-			 conn = DBConn.getConnection();
+			conn = DBConn.getConnection();
 			String query = "UPDATE devices_group "
 					+  "SET name = ?, picData = ? "
 					+  "WHERE groupID =" + devicesGroup.getGroupID();
@@ -112,6 +112,49 @@ public class DevicesGroupHandler {
 			DbUtils.closeQuietly(statement);
 			DbUtils.closeQuietly(conn);
 		}
+	}
+	
+	protected static DevicesGroup getDevicesGroupByID(int devicesGroupID) throws Exception{
+		DevicesGroup devicesGroup = null;	
+		Connection conn = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		if(devicesGroupID<1){
+			throw new Exception("Cannot get a devices group which doesn't exist");
+		}
+		String query = "SELECT *"
+				+ " FROM devices_group"
+				+ " WHERE groupID =" + devicesGroupID;
+
+		try{
+			conn = DBConn.getConnection();
+			statement = conn.createStatement();
+			resultSet = statement.executeQuery(query);
+			if(resultSet.next()){
+				devicesGroup = mapRow(resultSet);
+			}
+		}
+		catch(SQLException ex){
+			System.err.println(ex.getMessage());
+			throw ex;
+		}
+		finally{
+			DbUtils.closeQuietly(resultSet);
+			DbUtils.closeQuietly(statement);
+			DbUtils.closeQuietly(conn);
+		}
+
+		return devicesGroup;
+	}
+
+	private static DevicesGroup mapRow(ResultSet resultSet) throws SQLException {
+		DevicesGroup devicesGroup = new DevicesGroup();
+		devicesGroup.setGroupID(resultSet.getInt("groupID"));
+		devicesGroup.setGroupName(resultSet.getString("name"));
+		devicesGroup.setPicData(resultSet.getString("picData"));
+
+		return devicesGroup;
 	}
 
 }

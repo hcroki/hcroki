@@ -10,18 +10,20 @@ public class SessionHandler {
 		return getId(req) != null && getType(req) != null && getFullname(req)!=null;
 	}
 	
-	public static void authUser(Integer id , UserType type ,String fullName, HttpServletRequest req) {
+	public static void authUser(Integer id , UserType type ,String firstname,String lastname, HttpServletRequest req) {
 		HttpSession session = req.getSession(true);
 	    session.setAttribute("id", id);
-	    session.setAttribute("type", type);
-	    session.setAttribute("fullname", fullName);
+	    session.setAttribute("type", type); 
+	    session.setAttribute("firstname", firstname);
+	    session.setAttribute("lastname", lastname);
 	}
 	
 	public static void unAuthUser(HttpServletRequest req) {
 		HttpSession session = req.getSession(true);
 		session.removeAttribute("id");
 		session.removeAttribute("type");
-		session.removeAttribute("fullname");
+		session.removeAttribute("firstname");
+		session.removeAttribute("lastname");
 	}
 	
 	public static Integer getId(HttpServletRequest req) {
@@ -31,6 +33,13 @@ public class SessionHandler {
 	    id = (Integer)session.getAttribute("id");
 	    
 		return id;
+	}
+	
+	public static String getFullname(HttpServletRequest req){
+		HttpSession session = req.getSession(true);
+		String fullname = session.getAttribute("firstname") + " " + session.getAttribute("lastname");
+		
+		return fullname;
 	}
 	
 	public static UserType getType(HttpServletRequest req) {
@@ -51,15 +60,4 @@ public class SessionHandler {
 		
 		return isAdmin;
 	}
-	
-	public static String getFullname(HttpServletRequest req){
-		String fullname = null;
-		
-		HttpSession session = req.getSession(true);
-		fullname = (String)session.getAttribute("fullname");
-		
-		return fullname;
-	}
-	
-	
 }
